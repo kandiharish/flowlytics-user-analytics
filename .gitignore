@@ -7,3 +7,5 @@ build/
 coverage/
 .vscode/
 .DS_Store
+instruction.md
+questionary.md
