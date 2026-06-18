@@ -1,99 +1,302 @@
 # Flowlytics
 
-Flowlytics is a lightweight user analytics platform that tracks user interactions on web pages and visualizes user behavior through session analytics and click heatmaps.
+## User Analytics & Session Tracking Platform
 
-## Architecture Explanation
+Flowlytics is a lightweight user analytics platform designed to capture and visualize user interactions across web pages. The platform tracks page views and click events, stores behavioral data in MongoDB, and provides an analytics dashboard for exploring user journeys and click heatmaps.
 
-Flowlytics is built as a monorepo consisting of:
-1. **Tracker Script**: A vanilla JavaScript snippet (`tracker.js`) hosted by the backend. It generates a persistent session ID and tracks page views and clicks.
-2. **Backend API**: A Node.js/Express REST API. It uses MongoDB (Mongoose) to store and retrieve events. It is architected with clear boundaries separating route definitions, controllers, services, and repositories.
-3. **Analytics Dashboard**: A modern React Single Page Application built with Vite and Tailwind CSS. It communicates with the backend to visualize the data.
+The project demonstrates end-to-end full-stack engineering practices, including event tracking, RESTful API design, database modeling, analytics processing, and interactive data visualization.
 
-## Folder Structure
+---
+
+## Key Features
+
+* Session tracking using persistent browser identifiers
+* Page view event tracking
+* Click event tracking with coordinate capture
+* User journey visualization
+* Session-level analytics dashboard
+* Click heatmap visualization
+* MongoDB-based event storage
+* Modular and scalable backend architecture
+* Responsive React-based analytics dashboard
+
+---
+
+## Architecture Overview
+
+Flowlytics follows a modular architecture composed of three core layers:
+
+### 1. Tracker Script
+
+A lightweight JavaScript tracking script served by the backend.
+
+Responsibilities:
+
+* Generate and persist a unique session identifier
+* Track page views
+* Track click interactions
+* Capture click coordinates
+* Send events asynchronously to the backend API
+
+### 2. Backend API
+
+Built using Node.js, Express.js, and MongoDB.
+
+Responsibilities:
+
+* Receive analytics events
+* Validate incoming payloads
+* Persist event data
+* Generate session analytics
+* Aggregate heatmap data
+
+Architecture Pattern:
+
+```text
+Request
+   ↓
+Route
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Repository
+   ↓
+MongoDB
+```
+
+### 3. Analytics Dashboard
+
+Built using React, Vite, and Tailwind CSS.
+
+Responsibilities:
+
+* Display session analytics
+* Visualize user journeys
+* Render click heatmaps
+* Provide high-level analytics metrics
+
+---
+
+## Project Structure
+
 ```text
 Flowlytics/
+│
 ├── backend/
-│   ├── public/         # Serves tracker.js
-│   ├── src/            # Controllers, Models, Routes, Services, Repositories
-│   ├── package.json
-│   └── .env.example
+│   ├── public/
+│   │   └── tracker.js
+│   │
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── repositories/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── middleware/
+│   │   └── server.js
+│   │
+│   ├── .env.example
+│   └── package.json
+│
 ├── dashboard/
-│   ├── src/            # React components, pages, services
-│   ├── package.json
-│   └── vite.config.js
+│   ├── src/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   └── services/
+│   │
+│   └── package.json
+│
 └── README.md
 ```
 
-## Setup Instructions
+---
+
+## Tech Stack
+
+### Frontend
+
+* React.js
+* Vite
+* Tailwind CSS
+* Axios
+* React Router
+* Lucide React
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+
+### Tracking Layer
+
+* Vanilla JavaScript
+* Navigator Beacon API
+
+### Development Tools
+
+* Git
+* GitHub
+* npm
+
+---
+
+## Setup Steps
 
 ### Prerequisites
-- Node.js (v18+)
-- MongoDB (Local instance or MongoDB Atlas URL)
 
-### 1. Backend Setup
+Ensure the following are installed:
+
+* Node.js (v18 or higher)
+* npm
+* MongoDB (Local or Atlas)
+
+---
+
+### Backend Setup
+
 ```bash
 cd backend
 npm install
 ```
-Create a `.env` file in the `backend` directory (see `.env.example` below).
+
+Create a `.env` file inside the backend directory:
+
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/flowlytics
+ALLOWED_ORIGINS=http://localhost:5173
+```
+
+Start the backend server:
+
 ```bash
 npm run dev
 ```
-The backend will run on `http://localhost:5000`.
 
-### 2. Dashboard Setup
+Backend URL:
+
+```text
+http://localhost:5000
+```
+
+---
+
+### Frontend Setup
+
 ```bash
 cd dashboard
 npm install
 npm run dev
 ```
-The dashboard will run on `http://localhost:5173`.
 
-### 3. Integrating the Tracker
-To track events on any webpage, include the following script tag right before the closing `</body>` tag:
+Frontend URL:
+
+```text
+http://localhost:5173
+```
+
+---
+
+### Tracker Integration
+
+To enable event tracking on any webpage, include the following script before the closing body tag:
+
 ```html
 <script src="http://localhost:5000/tracker.js"></script>
 ```
 
-## Environment Variable Examples
+The tracker will automatically:
 
-**backend/.env**
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/flowlytics
-```
+* Create a session identifier
+* Capture page views
+* Capture click interactions
+* Send analytics events to the backend
 
-**dashboard/.env**
-```env
-VITE_API_URL=http://localhost:5000/api
-```
+---
 
-## API Documentation
+## API Endpoints
 
-### POST `/api/events`
-Stores one or multiple tracking events.
-**Body:**
-```json
-{
-  "sessionId": "sess_123abc_16900000",
-  "eventType": "click",
-  "pageUrl": "/about",
-  "timestamp": "2023-10-25T12:00:00.000Z",
-  "metadata": { "x": 450, "y": 300 }
-}
-```
+### POST /api/events
 
-### GET `/api/sessions`
-Returns a list of all sessions with event counts and durations.
+Stores analytics events.
 
-### GET `/api/sessions/:sessionId`
-Returns chronologically ordered events for a specific user journey.
+### GET /api/sessions
 
-### GET `/api/heatmap?pageUrl=/path`
-Returns aggregated click coordinates for the specified URL.
+Returns all tracked sessions with event counts and duration metrics.
+
+### GET /api/sessions/
+
+Returns the chronological sequence of events for a specific session.
+
+### GET /api/heatmap?pageUrl=
+
+Returns aggregated click coordinates used for heatmap rendering.
+
+---
 
 ## Assumptions and Trade-offs
-- **CORS:** The backend accepts events from any origin (`*`) for easy integration. In production, this should be restricted to known domains.
-- **Data Model:** A single `Events` collection is used. While this is simple and effective for a lightweight tool, a highly active platform might require separating sessions and events into two collections or using a time-series database.
-- **Heatmap Visualization:** The current heatmap generates red blur points over a generic layout using exact coordinates. For a production heatmap, tools like `heatmap.js` alongside an iframe snapshot of the target page are recommended.
-- **Authentication:** No authentication is currently required for the dashboard API, simplifying setup but limiting production security.
+
+### Assumptions
+
+* Session identifiers are stored in browser localStorage.
+* A session persists until browser storage is cleared.
+* Event timestamps are generated on the client side.
+* Analytics data is stored in a single MongoDB collection.
+
+### Trade-offs
+
+#### Open CORS Policy
+
+The application currently accepts requests from any origin to simplify development and testing.
+
+Production systems should restrict requests to approved domains.
+
+#### Simplified Heatmap Rendering
+
+The heatmap visualization uses lightweight coordinate-based rendering rather than a dedicated heatmap engine.
+
+This approach reduces implementation complexity while satisfying assignment requirements.
+
+#### Single Events Collection
+
+All analytics events are stored within a unified collection.
+
+This simplifies querying and supports future event types without schema redesign.
+
+#### No Authentication Layer
+
+Authentication and authorization were intentionally excluded to keep the scope focused on analytics functionality.
+
+#### Immediate Event Dispatch
+
+Events are transmitted individually rather than batched.
+
+While batching would improve efficiency at scale, immediate dispatch simplifies implementation and debugging.
+
+---
+
+## Future Enhancements
+
+* Event batching and queue processing
+* Dashboard authentication and role-based access control
+* Advanced heatmap rendering
+* Date-range filtering
+* Session replay capabilities
+* Real-time analytics updates
+* Dashboard charts and trend analysis
+* Rate limiting and enhanced validation
+
+---
+
+## Author
+
+Harish Kandi
+
+Full Stack & AI Engineering Enthusiast
