@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flowlytics Demo Page</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: #f9fafb;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+    h1 { color: #4f46e5; }
+    button {
+      background-color: #4f46e5;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s;
+    }
+    button:hover { background-color: #4338ca; }
+    .status {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: #e0e7ff;
+      border-radius: 4px;
+      color: #3730a3;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Flowlytics Tracker Demo</h1>
+    <p>This is a sample webpage to test the event tracking script.</p>
+  </div>
+
+  <div class="card">
+    <h2>Interactive Elements</h2>
+    <p>Click around this page to generate click events. The tracking script is automatically capturing your interactions and sending them to the backend.</p>
+    
+    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+      <button onclick="showStatus('Button 1 clicked!')">Test Button 1</button>
+      <button onclick="showStatus('Button 2 clicked!')" style="background-color: #059669;">Test Button 2</button>
+      <button onclick="showStatus('Button 3 clicked!')" style="background-color: #dc2626;">Test Button 3</button>
+    </div>
+
+    <div id="status" class="status"></div>
+  </div>
+
+  <div class="card">
+    <h2>Navigation Test</h2>
+    <p>Try appending some query parameters to the URL to test different page views.</p>
+    <ul>
+      <li><a href="?page=home">Home Page Simulation</a></li>
+      <li><a href="?page=about">About Page Simulation</a></li>
+      <li><a href="?page=products&id=1">Product Details Simulation</a></li>
+    </ul>
+  </div>
+
+  <script>
+    function showStatus(message) {
+      const statusEl = document.getElementById('status');
+      statusEl.style.display = 'block';
+      statusEl.textContent = message;
+      setTimeout(() => {
+        statusEl.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+
+  <!-- Flowlytics Tracking Script -->
+  <script src="/tracker.js"></script>
+</body>
+</html>

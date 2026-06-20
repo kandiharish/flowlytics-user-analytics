@@ -3,8 +3,10 @@ const eventService = require('../services/eventService');
 class SessionsController {
   async getSessions(req, res, next) {
     try {
-      const sessions = await eventService.getSessions();
-      res.json(sessions);
+      const page = parseInt(req.query.page, 10) || 1;
+      const limit = parseInt(req.query.limit, 10) || 10;
+      const result = await eventService.getSessions(page, limit);
+      res.json(result);
     } catch (error) {
       next(error);
     }

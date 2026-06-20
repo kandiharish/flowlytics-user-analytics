@@ -6,8 +6,8 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-export const getSessions = async () => {
-  const response = await api.get('/sessions');
+export const getSessions = async (page = 1, limit = 10) => {
+  const response = await api.get('/sessions', { params: { page, limit } });
   return response.data;
 };
 

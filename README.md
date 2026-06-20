@@ -20,6 +20,12 @@ The project demonstrates end-to-end full-stack engineering practices, including 
 * Modular and scalable backend architecture
 * Responsive React-based analytics dashboard
 
+## Production-Ready Enhancements
+* **Event Batching:** The tracking script batches events and flushes them every 3 seconds or on page exit to prevent server overload.
+* **True Session Expiry:** Implemented 30-minute inactivity timeouts for sessions using `localStorage` timestamp checks.
+* **Database Aggregation:** Heatmap coordinates and session statistics are grouped and calculated directly within MongoDB using the Aggregation Pipeline, preventing Node.js memory exhaustion.
+* **Dashboard Pagination:** The dashboard handles thousands of sessions cleanly with backend-driven pagination.
+
 ---
 
 ## Architecture Overview
@@ -274,11 +280,8 @@ This simplifies querying and supports future event types without schema redesign
 
 Authentication and authorization were intentionally excluded to keep the scope focused on analytics functionality.
 
-#### Immediate Event Dispatch
-
-Events are transmitted individually rather than batched.
-
-While batching would improve efficiency at scale, immediate dispatch simplifies implementation and debugging.
+#### Missing User Metadata
+Currently, the tracker does not capture user-agent, referrers, or detailed location data, keeping the focus strictly on on-page behavior and clicks.
 
 ---
 

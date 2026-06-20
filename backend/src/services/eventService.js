@@ -8,8 +8,8 @@ class EventService {
     return await eventRepository.create(eventData);
   }
 
-  async getSessions() {
-    return await eventRepository.findSessions();
+  async getSessions(page, limit) {
+    return await eventRepository.findSessions(page, limit);
   }
 
   async getSessionEvents(sessionId) {
@@ -17,22 +17,9 @@ class EventService {
   }
 
   async getHeatmapData(pageUrl) {
-    const events = await eventRepository.findClickEventsByPageUrl(pageUrl);
-    
-    // Aggregate coordinates
-    const heatmapData = {};
-    events.forEach(event => {
-      if (event.metadata && event.metadata.x !== undefined && event.metadata.y !== undefined) {
-        // Quantize coordinates slightly if desired, using exact for now
-        const key = `${Math.round(event.metadata.x)},${Math.round(event.metadata.y)}`;
-        if (!heatmapData[key]) {
-          heatmapData[key] = { x: Math.round(event.metadata.x), y: Math.round(event.metadata.y), count: 0 };
-        }
-        heatmapData[key].count += 1;
-      }
-    });
-
-    return Object.values(heatmapData);
+    // Data is already aggregated by the repository
+    const aggregatedData = await eventRepository.findClickEventsByPageUrl(pageUrl);
+    return aggregatedData;
   }
 }
 
