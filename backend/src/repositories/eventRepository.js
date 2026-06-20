@@ -54,7 +54,7 @@ class EventRepository {
   async findClickEventsByPageUrl(pageUrl) {
     // Instead of fetching all events to Node.js, we group by rounded coordinates directly in DB
     return await Event.aggregate([
-      { $match: { pageUrl, eventType: 'click', 'metadata.x': { $exists: true }, 'metadata.y': { $exists: true } } },
+      { $match: { pageUrl, eventType: 'click', 'metadata.x': { $type: 'number' }, 'metadata.y': { $type: 'number' } } },
       {
         $group: {
           _id: {

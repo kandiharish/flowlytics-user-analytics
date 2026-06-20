@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Flame, Map } from 'lucide-react';
+import { Search, Flame, Map, MousePointerClick } from 'lucide-react';
 import { getHeatmapData } from '../services/api';
 import { useApiFetch } from '../hooks/useApiFetch';
 import ErrorAlert from '../components/ErrorAlert';
@@ -23,7 +23,9 @@ const HeatmapPage = () => {
   };
 
   // Find max count to normalize intensity
-  const maxCount = heatmapData ? Math.max(1, ...heatmapData.map(p => p.count)) : 1;
+  const maxCount = Array.isArray(heatmapData) && heatmapData.length > 0 
+    ? Math.max(1, ...heatmapData.map(p => p.count || 0)) 
+    : 1;
 
   // Helper to get color based on intensity
   const getIntensityClass = (count) => {
@@ -95,7 +97,7 @@ const HeatmapPage = () => {
             <div className="flex flex-wrap items-center gap-4 text-sm bg-white px-4 py-2.5 rounded-lg border border-gray-200 shadow-sm w-full lg:w-auto">
               <span className="font-semibold text-gray-800 flex items-center gap-1.5">
                 <MousePointerClick size={16} className="text-gray-400" />
-                {heatmapData.length} unique points
+                {Array.isArray(heatmapData) ? heatmapData.length : 0} unique points
               </span>
               <div className="hidden sm:block h-5 w-px bg-gray-200"></div>
               <div className="flex items-center gap-3">
@@ -114,7 +116,7 @@ const HeatmapPage = () => {
             </div>
           </div>
 
-          {heatmapData.length === 0 ? (
+          {!Array.isArray(heatmapData) || heatmapData.length === 0 ? (
             <div className="text-center py-20 flex-1 flex flex-col justify-center items-center">
               <div className="bg-gray-50 p-6 rounded-full mb-4 border border-gray-100">
                 <Map className="h-12 w-12 text-gray-300" />
@@ -133,12 +135,12 @@ const HeatmapPage = () => {
                    backgroundPosition: 'center top'
                  }}>
               <div className="absolute top-0 left-0 min-w-[2500px] min-h-[2500px]">
-                {heatmapData.map((point, i) => (
+                {heatmapData.filter(p => typeof p.x === 'number' && typeof p.y === 'number').map((point, i) => (
                   <div
                     key={i}
-                    className={`absolute w-8 h-8 rounded-full opacity-[0.65] transform -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all ${getIntensityClass(point.count)}`}
+                    className={`absolute w-8 h-8 rounded-full opacity-[0.65] transform -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-all ${getIntensityClass(point.count || 0)}`}
                     style={{ left: point.x, top: point.y }}
-                    title={`Clicks: ${point.count}`}
+                    title={`Clicks: ${point.count || 0}`}
                   ></div>
                 ))}
               </div>
