@@ -8,6 +8,13 @@ The project demonstrates end-to-end full-stack engineering practices, including 
 
 ---
 
+## Live Deployments
+
+* **Live Dashboard:** `[Paste your Vercel Link Here, e.g., https://flowlytics.vercel.app]`
+* **Live API Backend:** `[Paste your Render Link Here, e.g., https://flowlytics-backend.onrender.com]`
+
+---
+
 ## Key Features
 
 * Session tracking using persistent browser identifiers
