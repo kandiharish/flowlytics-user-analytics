@@ -10,8 +10,8 @@ The project demonstrates end-to-end full-stack engineering practices, including 
 
 ## Live Deployments
 
-* **Live Dashboard:** `[Paste your Vercel Link Here, e.g., https://flowlytics.vercel.app]`
-* **Live API Backend:** `[Paste your Render Link Here, e.g., https://flowlytics-backend.onrender.com]`
+* **Live Dashboard:** https://flowlytics-user-analytics.vercel.app/
+* **Live API Backend:** https://flowlytics-casualfunnel-backend.onrender.com/
 
 ---
 
